@@ -105,6 +105,7 @@ const pintarCarrito = () =>{
         templeateCarrito.querySelector('.carritoCant').textContent = producto.cantidad
         templeateCarrito.querySelector('.btnSumar').dataset.id = producto.id
         templeateCarrito.querySelector('.btnRestar').dataset.id = producto.id
+        templeateCarrito.querySelector('.quitar-carrito').dataset.id = producto.id
         templeateCarrito.querySelector('.carritoPrice').textContent = producto.cantidad * producto.price
         const clone = templeateCarrito.cloneNode(true)
         fragment.appendChild(clone)
@@ -132,19 +133,47 @@ const pintarFooter = () =>{
     fragment.appendChild(clone)
     footer.appendChild(fragment)
 
-    const btnVaciar = document.getElementById('vaciar-carrito') //selecciono el boton vaciiar
+    const btnVaciar = document.getElementById('vaciar-carrito') //selecciono el boton vaciar
     btnVaciar.addEventListener('click',() =>{
-        Toastify({
-            text:"Carrito Vaciado",
-            duration: 1500,
-            gravity: 'bottom',
-            position: 'right',
-            style: {
-                background: "red",
-              }
-        }).showToast();
-        carrito = {}                //vacio el carrito
-        pintarCarrito()             //vuelvo a ejecutar el ciclo de pintado de carrito para que lo pinte vacio
+        swal({
+            title: "¿Esta Seguro?",
+            text: "Una vez vaciado el carrito no se podra recuperar la lista de productos",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                carrito = {}                //vacio el carrito                
+                pintarCarrito()  //vuelvo a ejecutar el ciclo de pintado de carrito para que lo pinte vacio
+              swal("Carrito Vaciado", {
+                icon: "success"   
+              });
+            } 
+          });
+
+        
+    })
+    const btnComprarCarrito = document.getElementById('comprar-carrito')
+    btnComprarCarrito.addEventListener('click',()=>{
+        const precioFinal = Object.values(carrito).reduce((accum,{cantidad,price}) => accum + cantidad * price,0)
+        swal({
+            title: "¿Finalizar Compra?",
+            text:  `Valor Final: $${precioFinal}`,
+            icon: "warning",
+            buttons: true,
+            dangerMode: false,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                carrito = {}                //vacio el carrito                
+                pintarCarrito()  //vuelvo a ejecutar el ciclo de pintado de carrito para que lo pinte vacio
+              swal("Compra Finalizada", {
+                icon: "success"   
+              });
+            } 
+          });
+        
     })
 
 }
@@ -184,6 +213,21 @@ const btnAccion  = e => {
           
         
     }
+    if(e.target.classList.contains('quitar-carrito')){
+        const producto = carrito[e.target.dataset.id] 
+        delete carrito[e.target.dataset.id]
+        Toastify({
+            text:producto.name + " se ha eliminado del carrito",
+            duration: 1500,
+            gravity: 'bottom',
+            position: 'right',
+            style: {
+                background: "#800000",
+              }
+        }).showToast();
+    } 
+    pintarCarrito()
+
     e.stopPropagation
 } 
 

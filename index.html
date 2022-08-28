@@ -61,6 +61,11 @@
             </button>
         </td>
         <td>$ <span class="carritoPrice"></span></td>
+        <td>
+          <button class="btn btn-danger btn-sm quitar-carrito">
+              Quitar
+          </button>
+      </td>
     </tr>
     </template>
     <!--El template para el footer-->
@@ -73,9 +78,15 @@
             </button>
         </td>
         <td class="font-weight-bold finalPrice">$ <span class="precioFinal"></span></td>
+        <td>
+          <button class="btn btn-success btn-sm" id="comprar-carrito">
+              Comprar
+          </button>
+      </td>
     </template>
 
     <script src="app.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>
